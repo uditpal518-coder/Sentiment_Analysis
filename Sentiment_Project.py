@@ -5,61 +5,66 @@ import pandas as pd
 import numpy as np
 
 # --- Page Config ---
-st.set_page_config(layout='wide', page_title="Food Sentiment Analysis")
+st.set_page_config(layout='wide', page_title="Food Sentiment Analysis", page_icon="🍔")
 
-# --- Custom CSS for Dynamic Banner ---
-# Har baar refresh hone par 'source.unsplash.com' se nayi food image aayegi
+# --- Custom CSS for Dynamic Banner & About Section ---
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;800&display=swap');
     
-    .hero-section {
-        background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
-                          url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1500&q=80');
-        background-size: cover;
-        background-position: center;
-        padding: 60px;
-        border-radius: 20px;
-        text-align: center;
-        color: white;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        margin-bottom: 40px;
-    }
-
-    /* Random Image Trick: URL mein timestamp add karne se image change hoti hai */
+    /* Dynamic Hero Section with Random Food Image */
     .hero-section {
         background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
-                          url('https://loremflickr.com/1200/400/food,cooking');
+                          url('https://loremflickr.com/1600/500/food,restaurant,pizza');
+        background-size: cover;
+        background-position: center;
+        padding: 80px 20px;
+        border-radius: 15px;
+        text-align: center;
+        color: white;
+        margin-bottom: 30px;
+        border-bottom: 5px solid #ff4e50;
     }
 
     .main-heading {
         font-family: 'Poppins', sans-serif;
-        font-size: 4.5rem;
+        font-size: 5rem;
         font-weight: 800;
         margin: 0;
-        letter-spacing: 2px;
-        color: #ffffff;
-        text-shadow: 2px 2px 15px rgba(0,0,0,0.5);
+        text-shadow: 3px 3px 20px rgba(0,0,0,0.7);
     }
     
     .sub-text {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
+        font-weight: 400;
         opacity: 0.9;
+        letter-spacing: 1px;
     }
 
-    /* Style for buttons and inputs */
+    /* About Section Styling */
+    .about-card {
+        background-color: #ffffff;
+        padding: 25px;
+        border-radius: 15px;
+        border-left: 8px solid #f9d423;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        margin-bottom: 20px;
+    }
+
     .stButton>button {
-        background-color: #ff4e50 !important;
+        width: 100%;
+        background: linear-gradient(to right, #ff4e50, #f9d423) !important;
         color: white !important;
-        border-radius: 10px !important;
+        font-weight: bold !important;
         border: none !important;
-        padding: 10px 25px !important;
+        padding: 12px !important;
+        transition: 0.3s;
     }
     </style>
     
     <div class="hero-section">
-        <h1 class="main-heading">🍔 Food Sentiment Analysis</h1>
-        <p class="sub-text">AI based Taste & Review Recognition</p>
+        <h1 class="main-heading">🍲 Food Sentiment Analysis</h1>
+        <p class="sub-text">Smart AI for Restaurant Reviews & Customer Feedback</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -71,23 +76,16 @@ def mycleaning(doc):
 try:
     model = joblib.load("Sentiment_model.pkl")
 except:
-    st.error("Model file 'Sentiment_model.pkl' nahi mili! Please check the file name.")
+    st.error("Error: 'Sentiment_model.pkl' file missing!")
 
-# --- Sidebar ---
-st.sidebar.title("🇮🇳 Project Dashboard")
-st.sidebar.info("Analyze food reviews instantly.")
+# --- Layout: Two Columns (Prediction & About) ---
+col_left, col_right = st.columns([2, 1])
 
-st.sidebar.header("📞 Contact")
-st.sidebar.write("Support: +91 999999999")
-
-# --- UI Layout ---
-col_main, col_spacer = st.columns([2, 1])
-
-with col_main:
-    st.write("### 💬 Real-time Prediction")
-    sample = st.text_input("Customer ka review yahan type karein...", placeholder="e.g. The pasta was amazing and fresh!")
+with col_left:
+    st.subheader("🔍 Real-time Sentiment Predictor")
+    sample = st.text_area("Review Paste Karein:", placeholder="Example: The biryani was spicy and authentic, loved it!", height=150)
     
-    if st.button("Analyze Sentiment"):
+    if st.button("Analyze Now"):
         if sample:
             pred = model.predict([sample])
             prob = model.predict_proba([sample])
@@ -96,31 +94,44 @@ with col_main:
             with res_col1:
                 if pred[0] == 0:
                     st.error("### Result: Negative 👎")
-                    st.write("Customer is unhappy with the food.")
                 else:
                     st.success("### Result: Positive 👍")
-                    st.write("Great! Customer liked the food.")
             with res_col2:
                 confidence = prob[0][0] if pred[0] == 0 else prob[0][1]
-                st.metric("Confidence", f"{confidence*100:.2f}%")
+                st.metric("Confidence Score", f"{confidence*100:.2f}%")
         else:
-            st.warning("Kuch toh likhiye!")
+            st.warning("Please enter some text to analyze.")
+
+with col_right:
+    st.markdown(f"""
+        <div class="about-card">
+            <h3>📖 About This Project</h3>
+            <p>Yeh project Machine Learning ka use karke customer reviews ko analyze karta hai. 
+            Iska maksad restaurants ko yeh samjhana hai ki unka khana logon ko kaisa lag raha hai.</p>
+            <hr>
+            <strong>Features:</strong>
+            <ul>
+                <li>NLP (Natural Language Processing)</li>
+                <li>Real-time Probability Score</li>
+                <li>Bulk Data Processing</li>
+            </ul>
+        </div>
+    """, unsafe_allow_html=True)
+    
+    # Sidebar style contact info inside main page
+    st.info("💡 **Tip:** Clear text results in higher confidence scores.")
 
 st.divider()
 
 # --- Bulk Prediction ---
-st.write("### 📂 Bulk Analysis (CSV/TXT)")
-file = st.file_uploader("Upload review file", type=["csv", "txt"])
+st.write("### 📂 Bulk Analysis (Upload CSV)")
+file = st.file_uploader("", type=["csv"])
 
 if file:
     df = pd.read_csv(file, names=["Review"])
-    if st.button("Run Bulk Prediction", key="b2"):
-        corpus = df.Review
-        pred = model.predict(corpus)
-        prob = np.max(model.predict_proba(corpus), axis=1)
-        
-        df['Result'] = pred
-        df['Confidence'] = prob
-        df['Result'] = df['Result'].map({0: 'Dislike 👎', 1: 'Like 👍'})
-        
-        st.dataframe(df, use_container_width=True)
+    if st.button("Process Bulk Data", key="bulk_btn"):
+        # Assuming the model can handle a list/Series of strings
+        df['Result'] = model.predict(df['Review'])
+        # Map values
+        df['Sentiment'] = df['Result'].map({0: 'Dislike 👎', 1: 'Like 👍'})
+        st.dataframe(df[['Review', 'Sentiment']], use_container_width=True)
