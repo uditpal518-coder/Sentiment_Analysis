@@ -5,133 +5,144 @@ import pandas as pd
 import numpy as np
 
 # --- Page Config ---
-st.set_page_config(layout='wide', page_title="Food Sentiment Analysis", page_icon="🍔")
+st.set_page_config(layout='wide', page_title="Food Sentiment Analysis", page_icon="🇮🇳")
 
-# --- Custom CSS for Dynamic Banner & About Section ---
+# --- Custom CSS for Styling ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;800&display=swap');
     
-    /* Dynamic Hero Section with Random Food Image */
+    /* Hero Section */
     .hero-section {
         background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
-                          url('https://loremflickr.com/1600/500/food,restaurant,pizza');
+                          url('https://loremflickr.com/1200/400/food,cooking');
         background-size: cover;
         background-position: center;
-        padding: 80px 20px;
-        border-radius: 15px;
+        padding: 60px;
+        border-radius: 20px;
         text-align: center;
         color: white;
-        margin-bottom: 30px;
-        border-bottom: 5px solid #ff4e50;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        margin-bottom: 40px;
     }
 
     .main-heading {
         font-family: 'Poppins', sans-serif;
-        font-size: 5rem;
+        font-size: 4.5rem;
         font-weight: 800;
         margin: 0;
-        text-shadow: 3px 3px 20px rgba(0,0,0,0.7);
+        letter-spacing: 2px;
+        text-shadow: 2px 2px 15px rgba(0,0,0,0.5);
     }
     
-    .sub-text {
-        font-size: 1.4rem;
-        font-weight: 400;
-        opacity: 0.9;
-        letter-spacing: 1px;
+    /* Sidebar Improvements */
+    .stSidebar {
+        background-color: #f8f9fa;
+    }
+    
+    .sidebar-label {
+        font-weight: bold;
+        color: #ff4e50;
     }
 
-    /* About Section Styling */
-    .about-card {
-        background-color: #ffffff;
-        padding: 25px;
-        border-radius: 15px;
-        border-left: 8px solid #f9d423;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        margin-bottom: 20px;
-    }
-
+    /* Buttons */
     .stButton>button {
-        width: 100%;
         background: linear-gradient(to right, #ff4e50, #f9d423) !important;
         color: white !important;
-        font-weight: bold !important;
+        border-radius: 10px !important;
         border: none !important;
-        padding: 12px !important;
-        transition: 0.3s;
+        padding: 10px 25px !important;
+        width: 100%;
     }
     </style>
     
     <div class="hero-section">
-        <h1 class="main-heading">🍲 Food Sentiment Analysis</h1>
-        <p class="sub-text">Smart AI for Restaurant Reviews & Customer Feedback</p>
+        <h1 class="main-heading">🍔 Food Sentiment Analysis</h1>
+        <p style="font-size: 1.5rem; opacity: 0.9;">AI-Powered Review Classification System</p>
     </div>
     """, unsafe_allow_html=True)
 
-# --- Logic ---
+# --- Sidebar Content ---
+# 1. Indian Flag Image
+st.sidebar.markdown("<h1 style='text-align: center;'>🇮🇳</h1>", unsafe_allow_html=True)
+# Agar aapke paas local image hai toh st.sidebar.image("Flag_of_India.jpg") use karein.
+# Filhaal ek beautiful online link use kar raha hoon:
+st.sidebar.image("https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg", use_container_width=True)
+
+st.sidebar.divider()
+
+# 2. About Project
+st.sidebar.title("🚀 About Project")
+st.sidebar.info("""
+Yeh ek Advanced Machine Learning project hai jo customer ke reviews ko analyze karke batata hai ki khana kaisa tha.
+- **Goal:** Business decision making ko improve karna.
+- **Accuracy:** Model is trained on 10,000+ restaurant reviews.
+""")
+
+# 3. Technical Stack (Libraries)
+st.sidebar.title("🛠️ Tech Stack")
+st.sidebar.markdown("""
+* **Python** (Core Logic)
+* **Streamlit** (UI Dashboard)
+* **Scikit-Learn** (ML Algorithm)
+* **Joblib** (Model Loading)
+* **Pandas & Numpy** (Data Handling)
+* **NLP / Regex** (Text Cleaning)
+""")
+
+# 4. Contact
+st.sidebar.title("📞 Contact Us")
+st.sidebar.success("📍 **AI Engineers at DUCAT**")
+st.sidebar.write("📧 support@foodsentiment.in")
+st.sidebar.write("📞 +91 999999999")
+
+# --- ML Logic ---
 def mycleaning(doc):
     return re.sub("[^a-zA-Z]"," ",doc).lower()
 
-# Model Loading
 try:
     model = joblib.load("Sentiment_model.pkl")
 except:
-    st.error("Error: 'Sentiment_model.pkl' file missing!")
+    st.error("⚠️ Model file 'Sentiment_model.pkl' nahi mili! Please check the directory.")
 
-# --- Layout: Two Columns (Prediction & About) ---
-col_left, col_right = st.columns([2, 1])
+# --- Main UI Layout ---
+st.write("### 💬 Real-time Prediction")
+sample = st.text_area("Customer ka review yahan likhein...", placeholder="e.g. The service was slow but the food was delicious!")
 
-with col_left:
-    st.subheader("🔍 Real-time Sentiment Predictor")
-    sample = st.text_area("Review Paste Karein:", placeholder="Example: The biryani was spicy and authentic, loved it!", height=150)
-    
-    if st.button("Analyze Now"):
-        if sample:
-            pred = model.predict([sample])
-            prob = model.predict_proba([sample])
-            
-            res_col1, res_col2 = st.columns(2)
-            with res_col1:
-                if pred[0] == 0:
-                    st.error("### Result: Negative 👎")
-                else:
-                    st.success("### Result: Positive 👍")
-            with res_col2:
-                confidence = prob[0][0] if pred[0] == 0 else prob[0][1]
-                st.metric("Confidence Score", f"{confidence*100:.2f}%")
-        else:
-            st.warning("Please enter some text to analyze.")
-
-with col_right:
-    st.markdown(f"""
-        <div class="about-card">
-            <h3>📖 About This Project</h3>
-            <p>Yeh project Machine Learning ka use karke customer reviews ko analyze karta hai. 
-            Iska maksad restaurants ko yeh samjhana hai ki unka khana logon ko kaisa lag raha hai.</p>
-            <hr>
-            <strong>Features:</strong>
-            <ul>
-                <li>NLP (Natural Language Processing)</li>
-                <li>Real-time Probability Score</li>
-                <li>Bulk Data Processing</li>
-            </ul>
-        </div>
-    """, unsafe_allow_html=True)
-    
-    # Sidebar style contact info inside main page
-    st.info("💡 **Tip:** Clear text results in higher confidence scores.")
+if st.button("Analyze Sentiment"):
+    if sample:
+        pred = model.predict([sample])
+        prob = model.predict_proba([sample])
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            if pred[0] == 0:
+                st.error("### Result: Negative 👎")
+                st.write("Feedback: Customer ko khana pasand nahi aaya.")
+            else:
+                st.success("### Result: Positive 👍")
+                st.write("Feedback: Customer khush hai!")
+        with col2:
+            confidence = prob[0][0] if pred[0] == 0 else prob[0][1]
+            st.metric("Confidence Score", f"{confidence*100:.2f}%")
+    else:
+        st.warning("Review box khali hai. Kuch type karein!")
 
 st.divider()
 
 # --- Bulk Prediction ---
-st.write("### 📂 Bulk Analysis (Upload CSV)")
-file = st.file_uploader("", type=["csv"])
+st.write("### 📂 Bulk Analysis (CSV/TXT)")
+file = st.file_uploader("Upload review file", type=["csv", "txt"])
 
 if file:
     df = pd.read_csv(file, names=["Review"])
-    if st.button("Process Bulk Data", key="bulk_btn"):
-        # Assuming the model can handle a list/Series of strings
-        df['Result'] = model.predict(df['Review'])
-        # Map values
-        df['Sentiment'] = df['Result'].map({0: 'Dislike 👎', 1: 'Like 👍'})
-        st.dataframe(df[['Review', 'Sentiment']], use_container_width=True)
+    if st.button("Run Bulk Prediction", key="b2"):
+        corpus = df.Review
+        pred = model.predict(corpus)
+        prob = np.max(model.predict_proba(corpus), axis=1)
+        
+        df['Result'] = pred
+        df['Confidence'] = prob
+        df['Result'] = df['Result'].map({0: 'Dislike 👎', 1: 'Like 👍'})
+        
+        st.dataframe(df, use_container_width=True)
