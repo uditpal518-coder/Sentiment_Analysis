@@ -4,24 +4,20 @@ import re
 import pandas as pd
 import numpy as np
 
-# --- Page Config ---
 st.set_page_config(layout='wide', page_title="Food Sentiment Analysis", page_icon="🇮🇳")
 
-# --- Custom Responsive CSS ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;800&display=swap');
     
-    /* Universal Box Sizing */
     * { font-family: 'Poppins', sans-serif; }
 
-    /* Hero Section - Fully Responsive */
     .hero-section {
         background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
                           url('https://loremflickr.com/1200/400/food,cooking');
         background-size: cover;
         background-position: center;
-        padding: clamp(30px, 8vw, 80px); /* Dynamic padding */
+        padding: clamp(30px, 8vw, 80px);
         border-radius: 20px;
         text-align: center;
         color: white;
@@ -31,7 +27,7 @@ st.markdown("""
     }
 
     .main-heading {
-        font-size: clamp(2rem, 10vw, 4.5rem); /* Text scales with screen size */
+        font-size: clamp(2rem, 10vw, 4.5rem);
         font-weight: 800;
         margin: 0;
         letter-spacing: 1px;
@@ -44,7 +40,6 @@ st.markdown("""
         margin-top: 10px;
     }
 
-    /* Sidebar Image Scaling */
     [data-testid="stSidebar"] img {
         max-width: 150px;
         margin: 0 auto;
@@ -52,7 +47,6 @@ st.markdown("""
         border-radius: 10px;
     }
 
-    /* Responsive Button */
     .stButton>button {
         background: linear-gradient(to right, #ff4e50, #f9d423) !important;
         color: white !important;
@@ -69,7 +63,6 @@ st.markdown("""
         box-shadow: 0 5px 15px rgba(255, 78, 80, 0.3);
     }
 
-    /* Dataframe responsive fix */
     .stDataFrame {
         width: 100% !important;
     }
@@ -81,7 +74,6 @@ st.markdown("""
     </div>
     """, unsafe_allow_html=True)
 
-# --- Sidebar Content ---
 with st.sidebar:
     st.markdown("<h1 style='text-align: center;'>🇮🇳</h1>", unsafe_allow_html=True)
     st.image("https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg")
@@ -89,15 +81,24 @@ with st.sidebar:
     st.divider()
     
     st.title("🚀 About Project")
-    st.info("Customer reviews analyze karke business growth mein madad karta hai.")
+    st.info("Yeh system Natural Language Processing ka use karke food reviews ko automatically analyze karta hai.")
     
-    st.title("🛠️ Tech Stack")
-    st.markdown("- **ML:** Scikit-Learn\n- **UI:** Streamlit\n- **Data:** Pandas/Numpy")
+    st.title("🛠️ Technical Stack")
+    st.write("**Streamlit:** Framework for creating the interactive web interface.")
+    st.write("**Scikit-Learn:** Used for training and implementing the Sentiment Model.")
+    st.write("**Pandas:** For data manipulation and reading CSV files.")
+    st.write("**Numpy:** For mathematical operations and array processing.")
+    st.write("**Joblib:** To load the pre-trained Machine Learning model.")
+    st.write("**Regex (re):** For cleaning and preprocessing the text data.")
+    
+    st.divider()
     
     st.title("📞 Contact Us")
-    st.success("📍 AI Engineers @ DUCAT")
+    st.success("📍 **AI Engineers @ DUCAT**")
+    st.write("📧 **Email:** support@foodanalysis.com")
+    st.write("📱 **Phone:** +91 99999-88888")
+    st.write("🌐 **Website:** www.ducatindia.com")
 
-# --- ML Logic ---
 def mycleaning(doc):
     return re.sub("[^a-zA-Z]"," ",doc).lower()
 
@@ -106,20 +107,17 @@ try:
 except:
     st.error("⚠️ Model 'Sentiment_model.pkl' not found!")
 
-# --- Responsive Grid Layout ---
-# Mobile par columns ek ke niche ek aa jayenge
 col_main, col_spacer = st.columns([3, 1])
 
 with col_main:
     st.write("### 💬 Real-time Prediction")
-    sample = st.text_area("Customer review yahan likhein...", placeholder="e.g. Delicious food!", height=100)
+    sample = st.text_area("Customer review yahan likhein...", placeholder="e.g. The food was absolutely delicious!", height=100)
     
     if st.button("Analyze Sentiment"):
         if sample:
             pred = model.predict([sample])
             prob = model.predict_proba([sample])
             
-            # Nested columns for result cards
             c1, c2 = st.columns(2)
             with c1:
                 if pred[0] == 0:
@@ -134,7 +132,6 @@ with col_main:
 
 st.divider()
 
-# --- Bulk Analysis ---
 st.write("### 📂 Bulk Analysis (CSV)")
 file = st.file_uploader("Upload CSV", type=["csv"])
 
