@@ -8,7 +8,7 @@ import numpy as np
 def mycleaning(doc):
     return re.sub("^a-zA-Z","",doc).lower()
 
-model=joblib.load("sentiment_model.pkl")
+model=joblib.load("Sentiment_model.pkl")
 
 st.set_page_config(layout='wide')
 st.title("Food Sentiment Analysis")
