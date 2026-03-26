@@ -13,7 +13,7 @@ model=joblib.load("Sentiment_model.pkl")
 st.set_page_config(layout='wide')
 st.title("Food Sentiment Analysis")
 
-st.sidebar.image("Flag_of_india.jpg")
+st.sidebar.image("Flag_of_India.jpg")
 st.sidebar.title("About Project")
 st.sidebar.write("Prediction of Sentiment Negative or Positive for a food review")
 
