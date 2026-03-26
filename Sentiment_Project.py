@@ -4,10 +4,10 @@ import re
 import pandas as pd
 import numpy as np
 
-# --- Page Config ---
+
 st.set_page_config(layout='wide', page_title="Food Sentiment Analysis")
 
-# --- Custom CSS for the Heading ---
+
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@800&display=swap');
@@ -38,18 +38,16 @@ st.markdown("""
     <div class="underline"></div>
     """, unsafe_allow_html=True)
 
-# --- Logic ---
 def mycleaning(doc):
-    return re.sub("[^a-zA-Z]"," ",doc).lower() # Thoda fix kiya: [^a-zA-Z] better hai
+    return re.sub("[^a-zA-Z]"," ",doc).lower() 
 
-# Model loading (ensure file exists)
 try:
     model = joblib.load("Sentiment_model.pkl")
 except:
     st.error("Model file 'Sentiment_model.pkl' nahi mili!")
 
-# --- Sidebar ---
-# st.sidebar.image("Flag_of_India.jpg") # Make sure image is in same folder
+
+ st.sidebar.image("Flag_of_India.jpg") 
 st.sidebar.title("🇮🇳 About Project")
 st.sidebar.info("Prediction of Sentiment (Negative or Positive) for food reviews using Machine Learning.")
 
