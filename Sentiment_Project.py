@@ -47,7 +47,7 @@ except:
     st.error("Model file 'Sentiment_model.pkl' nahi mili!")
 
 
- st.sidebar.image("Flag_of_India.jpg") 
+st.sidebar.image("Flag_of_India.jpg") 
 st.sidebar.title("🇮🇳 About Project")
 st.sidebar.info("Prediction of Sentiment (Negative or Positive) for food reviews using Machine Learning.")
 
