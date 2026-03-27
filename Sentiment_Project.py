@@ -140,4 +140,5 @@ if file:
     if st.button("Process Bulk File"):
         df['Result'] = model.predict(df['Review'])
         df['Sentiment'] = df['Result'].map({0: 'Dislike 👎', 1: 'Like 👍'})
+        df['Confidence'] = prob
         st.dataframe(df[['Review', 'Sentiment']], use_container_width=True)
