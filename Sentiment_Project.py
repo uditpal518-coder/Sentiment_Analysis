@@ -132,13 +132,23 @@ with col_main:
 
 st.divider()
 
+st.divider()
+
 st.write("### 📂 Bulk Analysis (CSV)")
-file = st.file_uploader("Upload CSV & TEXT", type=["csv","txt"])
+file = st.file_uploader("Upload CSV", type=["csv"])
 
 if file:
     df = pd.read_csv(file, names=["Review"])
+    
     if st.button("Process Bulk File"):
-        df['Result'] = model.predict(df['Review'])
-        df['Sentiment'] = df['Result'].map({0: 'Dislike 👎', 1: 'Like 👍'})
-        df['Confidence'] = prob
-        st.dataframe(df[['Review', 'Sentiment']], use_container_width=True)
+        
+        y_pred = model.predict(df['Review'])
+        
+        y_prob = model.predict_proba(df['Review'])
+        conf_scores = np.max(y_prob, axis=1) 
+        
+        df['Sentiment'] = y_pred
+        df['Sentiment'] = df['Sentiment'].map({0: 'Dislike 👎', 1: 'Like 👍'})
+        df['Confidence'] = (conf_scores * 100).round(2).astype(str) + '%' 
+        
+        st.dataframe(df, use_container_width=True)
