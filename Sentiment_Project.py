@@ -133,7 +133,7 @@ with col_main:
 st.divider()
 
 st.write("### 📂 Bulk Analysis (CSV)")
-file = st.file_uploader("Upload CSV & TEXT", type=["csv","txt])
+file = st.file_uploader("Upload CSV & TEXT", type=["csv","txt"])
 
 if file:
     df = pd.read_csv(file, names=["Review"])
