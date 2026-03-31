@@ -76,7 +76,7 @@ with st.sidebar:
     
     st.title("📞 Contact Us")
     st.success("📍 **AI Engineers @ DUCAT**")
-    st.write("📧 **Email:** support@foodanalysis.com")
+    st.write("📧 **Email:** uditpal518@gmail.com")
     st.write("📱 **Phone:** +91 99999-88888")
     st.write("🌐 **Website:** www.ducatindia.com")
 
