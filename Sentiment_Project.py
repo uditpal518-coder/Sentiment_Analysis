@@ -92,7 +92,7 @@ col_main, col_spacer = st.columns([3, 1])
 
 with col_main:
     st.write("### 💬 Real-time Prediction")
-    sample = st.text_area("Customer review yahan likhein...", placeholder="e.g. The food was absolutely delicious!", height=100)
+    sample = st.text_area("Customer review...", placeholder="e.g. The food was absolutely delicious!", height=100)
     
     if st.button("Analyze Sentiment"):
         if sample:
