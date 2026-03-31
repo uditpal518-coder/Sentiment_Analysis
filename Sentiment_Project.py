@@ -8,13 +8,21 @@ st.set_page_config(layout='wide', page_title="Food Sentiment Analysis", page_ico
 
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;800&display=swap');
-    
-    * { font-family: 'Poppins', sans-serif; }
+        
+    /*.stApp{background-image: url("https://www.rivaicmimarlik.com/upload/images/sayfalar/2022/restoran-ic-mimari-tasarimi-44902-5037952778.jpg");
+        background-size: cover;
+        background-position: center;
+        padding: clamp(30px, 8vw, 80px);
+        border-radius: 20px;
+        text-align: center;
+        color: white;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        margin-bottom: 2rem;
+        width: 100%;
+    }*/
 
     .hero-section {
-        background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
-                          url('https://loremflickr.com/1200/400/food,cooking');
+        background-image: url("https://media.smallbiztrends.com/2021/05/fast-food-restaurants.png");
         background-size: cover;
         background-position: center;
         padding: clamp(30px, 8vw, 80px);
@@ -40,32 +48,6 @@ st.markdown("""
         margin-top: 10px;
     }
 
-    [data-testid="stSidebar"] img {
-        max-width: 150px;
-        margin: 0 auto;
-        display: block;
-        border-radius: 10px;
-    }
-
-    .stButton>button {
-        background: linear-gradient(to right, #ff4e50, #f9d423) !important;
-        color: white !important;
-        border-radius: 12px !important;
-        border: none !important;
-        padding: 12px 20px !important;
-        font-size: 1rem !important;
-        width: 100%;
-        transition: 0.3s ease;
-    }
-    
-    .stButton>button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(255, 78, 80, 0.3);
-    }
-
-    .stDataFrame {
-        width: 100% !important;
-    }
     </style>
     
     <div class="hero-section">
@@ -75,8 +57,7 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 with st.sidebar:
-    st.markdown("<h1 style='text-align: center;'>🇮🇳</h1>", unsafe_allow_html=True)
-    st.image("https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg")
+    st.image("restaurant.jpg")
     
     st.divider()
     
@@ -132,23 +113,13 @@ with col_main:
 
 st.divider()
 
-st.divider()
-
-st.write("### 📂 Bulk Analysis (CSV)")
+st.write("### 📂 Bulk Analysis (CSV & TXT)")
 file = st.file_uploader("Upload CSV & TEXT", type=["csv","txt"])
 
 if file:
     df = pd.read_csv(file, names=["Review"])
-    
     if st.button("Process Bulk File"):
-        
-        y_pred = model.predict(df['Review'])
-        
-        y_prob = model.predict_proba(df['Review'])
-        conf_scores = np.max(y_prob, axis=1) 
-        
-        df['Sentiment'] = y_pred
-        df['Sentiment'] = df['Sentiment'].map({0: 'Dislike 👎', 1: 'Like 👍'})
-        df['Confidence'] = (conf_scores * 100).round(2).astype(str) + '%' 
-        
-        st.dataframe(df, use_container_width=True)
+        df['Result'] = model.predict(df['Review'])
+        df['Confidence']= np.max(model.predict_proba(df['Review']),axis=1)
+        df['Sentiment'] = df['Result'].map({0: 'Dislike 👎', 1: 'Like 👍'})
+        st.dataframe(df[['Review', 'Sentiment','Confidence']], use_container_width=True)
