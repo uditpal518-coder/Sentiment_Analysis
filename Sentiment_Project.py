@@ -4,7 +4,7 @@ import re
 import pandas as pd
 import numpy as np
 
-st.set_page_config(layout='wide', page_title="Food Sentiment Analysis", page_icon="🇮🇳")
+st.set_page_config(layout='wide', page_title="Food Sentiment Analysis", page_icon="🍔")
 
 st.markdown("""
     <style>
