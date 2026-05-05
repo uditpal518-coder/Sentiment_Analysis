@@ -8,19 +8,6 @@ st.set_page_config(layout='wide', page_title="Food Sentiment Analysis", page_ico
 
 st.markdown("""
     <style>
-        
-    /*.stApp{background-image: url("https://www.rivaicmimarlik.com/upload/images/sayfalar/2022/restoran-ic-mimari-tasarimi-44902-5037952778.jpg");
-        background-size: cover;
-        background-position: center;
-        padding: clamp(30px, 8vw, 80px);
-        border-radius: 20px;
-        text-align: center;
-        color: white;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        margin-bottom: 2rem;
-        width: 100%;
-    }*/
-
     .hero-section {
         background-image: url("https://media.smallbiztrends.com/2021/05/fast-food-restaurants.png");
         background-size: cover;
@@ -48,6 +35,27 @@ st.markdown("""
         margin-top: 10px;
     }
 
+    @media (max-width: 768px) {
+        .hero-section {
+            padding: 1.5rem;
+            border-radius: 15px;
+        }
+        .main-heading {
+            font-size: 2.2rem;
+        }
+        .sub-text {
+            font-size: 1.1rem;
+        }
+        .stButton>button {
+            width: 100%;
+            font-size: 16px;
+            height: 2.5em;
+            border-radius: 10px;
+            background-color: #ff4b4b;
+            color: white;
+        }
+    }
+
     </style>
     
     <div class="hero-section">
@@ -57,7 +65,7 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 with st.sidebar:
-    st.image("restaurant.jpg")
+    st.image("restaurant.jpg", use_container_width=True)
     
     st.divider()
     
@@ -125,7 +133,7 @@ elif data_source == "Use Sample File":
         df = pd.read_csv(file, names=["Review"])
 
 if df is not None:  
-    if st.button("Process Bulk File"):
+    if st.button("Process Bulk File", use_container_width=True):
         df['Result'] = model.predict(df['Review'])
         df['Confidence']= np.max(model.predict_proba(df['Review']),axis=1)
         df['Sentiment'] = df['Result'].map({0: 'Dislike 👎', 1: 'Like 👍'})
