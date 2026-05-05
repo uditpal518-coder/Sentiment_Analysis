@@ -114,6 +114,7 @@ with col_main:
 st.divider()
 
 st.write("### 📂 Bulk Analysis (CSV & TXT)")
+with open("", "br) as file:
 file = st.file_uploader("Upload CSV & TEXT", type=["csv","txt"])
 
 if file:
@@ -121,5 +122,5 @@ if file:
     if st.button("Process Bulk File"):
         df['Result'] = model.predict(df['Review'])
         df['Confidence']= np.max(model.predict_proba(df['Review']),axis=1)
-        df['Sentiment'] = df['Result'].map({0: 'st.error("Dislike 👎")', 1: 'Like 👍'})
+        df['Sentiment'] = df['Result'].map({0: 'Dislike 👎', 1: 'Like 👍'})
         st.dataframe(df[['Review', 'Sentiment','Confidence']], use_container_width=True)
