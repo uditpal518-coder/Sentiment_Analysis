@@ -114,8 +114,12 @@ with col_main:
 st.divider()
 
 st.write("### 📂 Bulk Analysis (CSV & TXT)")
-with open("", "br) as file:
-file = st.file_uploader("Upload CSV & TEXT", type=["csv","txt"])
+data_source = st.radio("Choose Data Source:",["Upload your own file","Use Sample File"]
+file = None
+if data_source == "Upload your own file":
+    file = st.file_uploader("Upload CSV & TEXT", type=["csv","txt"])
+elif data_source == "Use Sample File":
+    with open("reviews.txt", "br") as file:
 
 if file:
     df = pd.read_csv(file, names=["Review"])
