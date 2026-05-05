@@ -121,5 +121,5 @@ if file:
     if st.button("Process Bulk File"):
         df['Result'] = model.predict(df['Review'])
         df['Confidence']= np.max(model.predict_proba(df['Review']),axis=1)
-        df['Sentiment'] = df['Result'].map({0: 'Dislike 👎', 1: 'Like 👍'})
-        st.dataframe(df[['Review', 'Sentiment','Confidence','Result']], use_container_width=True)
+        df['Sentiment'] = df['Result'].map({0: 'st.error("Dislike 👎")', 1: 'Like 👍'})
+        st.dataframe(df[['Review', 'Sentiment','Confidence']], use_container_width=True)
