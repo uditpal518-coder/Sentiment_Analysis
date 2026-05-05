@@ -120,6 +120,7 @@ if data_source == "Upload your own file":
     file = st.file_uploader("Upload CSV & TEXT", type=["csv","txt"])
 elif data_source == "Use Sample File":
     with open("reviews.txt", "br") as file:
+        return file
 
 if file:
     df = pd.read_csv(file, names=["Review"])
