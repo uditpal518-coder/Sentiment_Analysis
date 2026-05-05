@@ -115,15 +115,15 @@ st.divider()
 
 st.write("### 📂 Bulk Analysis (CSV & TXT)")
 data_source = st.radio("Choose Data Source:",["Upload your own file","Use Sample File"])
-df = None
 if data_source == "Upload your own file":
     file = st.file_uploader("Upload CSV & TEXT", type=["csv","txt"])
-    df = pd.read_csv(file, names=["Review"])
+    if file:
+        df = pd.read_csv(file, names=["Review"])
 elif data_source == "Use Sample File":
     with open("reviews.txt", "br") as file:
         df = pd.read_csv(file, names=["Review"])
 
-if df:  
+if df is not None:  
     if st.button("Process Bulk File"):
         df['Result'] = model.predict(df['Review'])
         df['Confidence']= np.max(model.predict_proba(df['Review']),axis=1)
