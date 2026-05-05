@@ -114,7 +114,7 @@ with col_main:
 st.divider()
 
 st.write("### 📂 Bulk Analysis (CSV & TXT)")
-data_source = st.radio("Choose Data Source:",["Upload your own file","Use Sample File"]
+data_source = st.radio("Choose Data Source:",["Upload your own file","Use Sample File"])
 file = None
 if data_source == "Upload your own file":
     file = st.file_uploader("Upload CSV & TEXT", type=["csv","txt"])
